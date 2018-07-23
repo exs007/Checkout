@@ -1,0 +1,1 @@
+dotnet run -p ./src/CheckoutKataAPI/CheckoutKataAPI.csproj

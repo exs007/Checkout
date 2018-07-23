@@ -1,0 +1,1 @@
+dotnet test ./src/CheckoutKataAPI.Test/CheckoutKataAPI.Test.csproj
