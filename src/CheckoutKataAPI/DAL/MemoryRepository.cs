@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace CheckoutKataAPI.DAL
 {
+    // Storing is based on a dictionary with locks for providing thread-safe access
     public class MemoryRepository<T> : IRepository<T> where T : BaseEntity
     {
         //TODO: return a copy of an object
@@ -64,17 +65,20 @@ namespace CheckoutKataAPI.DAL
         {
             if (item.Id == 0)
                 return false;
-
+            
             var recordLock = GetRecordLock(item.Id);
             lock (recordLock)
             {
                 T storeItem = null;
-                _storage.TryGetValue(item.Id, out storeItem);
-
-                if (IsActive(storeItem))
+                lock (_storageLock)
                 {
-                    _storage[item.Id] = item;
-                    return true;
+                    _storage.TryGetValue(item.Id, out storeItem);
+
+                    if (IsActive(storeItem))
+                    {
+                        _storage[item.Id] = item;
+                        return true;
+                    }
                 }
             }
 
@@ -90,7 +94,10 @@ namespace CheckoutKataAPI.DAL
             lock (recordLock)
             {
                 T item = null;
-                _storage.TryGetValue(id, out item);
+                lock (_storageLock)
+                {
+                    _storage.TryGetValue(id, out item);
+                }
 
                 if (IsActive(item))
                 {
