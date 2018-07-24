@@ -116,7 +116,6 @@ namespace CheckoutKataAPI.Test.Services
             product2 =_productRepository.Add(product2);
             
             var exception = Assert.Throws<Exception>(() => _productService.GetProduct(product1.SKU));
-            _productRepository.DeleteAll();
             Assert.Contains("Multiple products with the same SKU", exception.Message);
         }
     }
