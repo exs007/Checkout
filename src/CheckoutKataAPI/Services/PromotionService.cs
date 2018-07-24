@@ -20,12 +20,33 @@ namespace CheckoutKataAPI.Services
 
         public ICollection<BasePromotion> GetPromotions()
         {
-            throw new NotImplementedException();
+            return _promotionRepository.SelectAll();
         }
 
         public BasePromotion AddPromotion(BasePromotion item)
         {
-            throw new NotImplementedException();
+            if (item is PricePromotion)
+            {
+                var pricePromotion = item as PricePromotion;
+            } 
+            else if (item is BuyXGetYPromotion)
+            {
+                var buyGetPomotion = item as BuyXGetYPromotion;
+                if (buyGetPomotion.BuyItems?.Count == 0)
+                {
+                    throw new AppValidationException(nameof(buyGetPomotion.BuyItems), "Buy part isn't specified");
+                }
+                if (buyGetPomotion.GetItems?.Count == 0)
+                {
+                    throw new AppValidationException(nameof(buyGetPomotion.GetItems), "Get part isn't specified");
+                }
+            }
+            else
+            {
+                throw new ArgumentException("The following promotion type can't be processed");
+            }
+
+            return _promotionRepository.Add(item);
         }
     }
 }

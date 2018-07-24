@@ -24,6 +24,7 @@ namespace CheckoutKataAPI.Configuration
 
             services.AddSingleton(typeof(IRepository<>), typeof(MemoryRepository<>));
             services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<IPromotionService, PromotionService>();
 
             return services;
         }
