@@ -20,17 +20,47 @@ namespace CheckoutKataAPI.Services
 
         public ICollection<Product> GetProducts(ICollection<int> ids)
         {
-            throw new NotImplementedException();
+            var toReturn = new List<Product>();
+
+            foreach (var id in ids)
+            {
+                var product = _productRepository.Select(id);
+                if (product == null)
+                {
+                    throw new AppValidationException("Invalid product id");
+                }
+
+                toReturn.Add(product);
+            }
+
+            return toReturn;
         }
 
         public Product GetProduct(string sku)
         {
-            throw new NotImplementedException();
+            var items = _productRepository.Select(p => p.SKU == sku);
+            if (items.Count > 1)
+            {
+                throw new Exception("Multiple products with the same SKU");
+            }
+
+            return items.FirstOrDefault();
         }
 
         public Product AddProduct(Product item)
         {
-            throw new NotImplementedException();
+            if (!Enum.IsDefined(typeof(PriceType), item.PriceType))
+            {
+                throw new AppValidationException(nameof(item.PriceType), "Invalid price type");
+            }
+
+            var duplicatesExist = _productRepository.Select(p => p.SKU == item.SKU).Any();
+            if (duplicatesExist)
+            {
+                throw new AppValidationException(nameof(item.SKU), "Exist SKU");
+            }
+
+            return _productRepository.Add(item);
         }
     }
 }
