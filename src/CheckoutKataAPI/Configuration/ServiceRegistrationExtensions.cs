@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using CheckoutKataAPI.DAL;
 using CheckoutKataAPI.Services;
+using CheckoutKataAPI.Workflow.Orders;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -25,6 +26,7 @@ namespace CheckoutKataAPI.Configuration
             services.AddSingleton(typeof(IRepository<>), typeof(MemoryRepository<>));
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IPromotionService, PromotionService>();
+            services.AddScoped<IOrderCalculationWorkflowProcessor, OrderCalculationWorkflowProcessor>();
 
             return services;
         }

@@ -32,7 +32,22 @@ namespace CheckoutKataAPI.Workflow.Base
 
         public T Execute(T context)
         {
-            throw new NotImplementedException();
+            var processorContext = new WorkflowProcessorContext(_provider);
+            //go through actions with an executing context and a custom data context
+            foreach (var action in Actions)
+            {
+                var workflowAction = (IWorkflowAction<T>)Activator.CreateInstance(action.ActionType);
+                workflowAction.ExecuteAction(context, processorContext);
+            }
+
+            return context;
+        }
+
+        //Setup an action into a pipeline.
+        protected void SetupAction<A>() where A: IWorkflowAction<T>
+        {
+            var actionItem = new ActionItem(typeof(A));
+            SetupAction(actionItem);
         }
 
         private void SetupAction(ActionItem actionItem)
