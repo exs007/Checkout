@@ -20,7 +20,7 @@ namespace CheckoutKataAPI.Models
         public ICollection<OrderToProduct> OrderToProducts {get;set;}
         
         // result order's total
-        public decimal Total{get;set;}
+        public decimal Total => OrderToProducts.Sum(p => p.Amount);
 
         public OrderCalculationContext(Order sourceOrder)
         {
