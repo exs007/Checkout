@@ -9,7 +9,7 @@ namespace CheckoutKataAPI.Entities.Promotions
     {
         public int IdProduct { get; set; }
 
-        public decimal Amount{get;set;}
+        public decimal QTY{get;set;}
 
         public decimal PercentDiscount { get; set; }
     }

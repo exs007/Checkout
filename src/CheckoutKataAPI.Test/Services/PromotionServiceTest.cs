@@ -34,25 +34,25 @@ namespace CheckoutKataAPI.Test.Services
                     new BuyPromotionItem()
                     {
                         IdProduct=1,
-                        Amount=1,
+                        QTY=1,
                     },
                     new BuyPromotionItem()
                     {
                         IdProduct=2,
-                        Amount=1.5m,
+                        QTY=1.5m,
                     },
                 }).Fill(p => p.GetItems, new List<GetPromotionItem>()
                 {
                     new GetPromotionItem()
                     {
                         IdProduct=3,
-                        Amount=1,
+                        QTY=1,
                         PercentDiscount=100
                     },
                     new GetPromotionItem()
                     {
                         IdProduct=4,
-                        Amount=1.5m,
+                        QTY=1.5m,
                         PercentDiscount =50,
                     },
                 });
