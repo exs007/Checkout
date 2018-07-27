@@ -13,7 +13,7 @@ namespace CheckoutKataAPI.Entities.Orders
 
         public decimal Price{get;set;}
 
-        public decimal Amount{get;set;}
+        public decimal Amount => QTY * Price;
 
         public int? IdUsedPromotion{get;set;}
     }

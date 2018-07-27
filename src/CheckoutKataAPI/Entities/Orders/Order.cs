@@ -12,5 +12,10 @@ namespace CheckoutKataAPI.Entities.Orders
         public ICollection<OrderToProduct> OrderToProducts {get;set;}
 
         public decimal Total {get;set;}
+
+        public Order()
+        {
+            OrderToProducts = new List<OrderToProduct>();
+        } 
     }
 }
