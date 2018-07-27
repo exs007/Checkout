@@ -98,7 +98,7 @@ namespace CheckoutKataAPI.Test.Workflow.Actions
             var executingContext = GetExecutingContext(new List<BasePromotion>());
             _action.ExecuteAction(context, executingContext);
 
-            Assert.Equal(2, context.ActivePromotions.Count);
+            Assert.Equal(0, context.ActivePromotions.Count);
         }
     }
 }

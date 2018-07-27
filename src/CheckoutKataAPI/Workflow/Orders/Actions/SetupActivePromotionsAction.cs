@@ -9,12 +9,16 @@ using System.Threading.Tasks;
 
 namespace CheckoutKataAPI.Workflow.Orders.Actions
 {
-    //setup all promotions which avaliable now
+    //setup all promotions which are avaliable now
     public class SetupActivePromotionsAction : IWorkflowAction<OrderCalculationContext>
     {
         public void ExecuteAction(OrderCalculationContext context, IWorkflowProcessorContext processorContext)
         {
+            var promotionService = processorContext.Resolve<IPromotionService>();
 
+            context.ActivePromotions = promotionService.GetPromotions().Where(p=>
+                    (!p.StartDate.HasValue || p.StartDate.Value <= DateTime.Now) &&
+                    (!p.EndDate.HasValue || p.EndDate.Value >= DateTime.Now)).ToList();
         }
     }
 }
