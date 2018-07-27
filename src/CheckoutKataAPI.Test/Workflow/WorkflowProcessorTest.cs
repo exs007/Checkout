@@ -16,7 +16,7 @@ using Moq;
 
 namespace CheckoutKataAPI.Test.Workflow
 {
-    public class WorkflowProcessorTest
+    public class SetupOrderedProductsInfoTest
     {
         private class Action1 : IWorkflowAction<FakeWorkflowDataContent>
         {
@@ -42,7 +42,7 @@ namespace CheckoutKataAPI.Test.Workflow
             }
         }
         
-        public WorkflowProcessorTest()
+        public SetupOrderedProductsInfoTest()
         {
         }
 
