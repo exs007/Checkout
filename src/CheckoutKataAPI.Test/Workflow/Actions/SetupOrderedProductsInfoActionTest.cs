@@ -34,7 +34,7 @@ namespace CheckoutKataAPI.Test.Workflow.Actions
                 {
                     Id = 1,
                     Price = 10.5m,
-                    PriceType = PriceType.PerQuantity
+                    PriceType = PriceType.PerEach
                 },
                 new Product()
                 {

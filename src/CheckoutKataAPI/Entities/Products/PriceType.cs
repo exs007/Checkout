@@ -7,7 +7,7 @@ namespace CheckoutKataAPI.Entities.Products
 {
     public enum PriceType
     {
-        PerQuantity=1,
+        PerEach=1,
         PerLb=2
     }
 }

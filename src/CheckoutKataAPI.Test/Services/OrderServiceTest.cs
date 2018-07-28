@@ -22,26 +22,32 @@ namespace CheckoutKataAPI.Test.Services
     {
         private readonly IOrderService _orderService;
         private readonly IRepository<Order> _orderRepository;
-        private readonly Product _existProduct = new Product()
+        private readonly Product _existProductPricePerLb = new Product()
         {
             Id = 1,
             SKU = "sku1",
             Price = 10m,
-            PriceType = PriceType.PerQuantity
+            PriceType = PriceType.PerLb
         };
-        private readonly string _notExistProductSku = "sku2";
-        private readonly OrderCalculationContext _retunrOrderCalculationContext = new OrderCalculationContext(new Order()
+        private readonly Product _existProductPricePerEach = new Product()
         {
-            Id=1,
-        });
+            Id = 3,
+            SKU = "sku3",
+            Price = 21m,
+            PriceType = PriceType.PerEach
+        };
+
+        private readonly string _notExistProductSku = "sku2";
 
         public OrderServiceTest()
         {
             _orderRepository = new FakeRepository<Order>();
 
             var productServiceSetup = new Mock<IProductService>();
-            productServiceSetup.Setup(p=>p.GetProduct(_existProduct.SKU)).
-                Returns(_existProduct);
+            productServiceSetup.Setup(p=>p.GetProduct(_existProductPricePerLb.SKU)).
+                Returns(_existProductPricePerLb);
+            productServiceSetup.Setup(p=>p.GetProduct(_existProductPricePerEach.SKU)).
+                Returns(_existProductPricePerEach);
             productServiceSetup.Setup(p=>p.GetProduct(_notExistProductSku)).
                 Returns((Product)null);
 
@@ -124,13 +130,13 @@ namespace CheckoutKataAPI.Test.Services
             var order = _orderRepository.Add(new Order());
             order.OrderToProducts.Add(new OrderToProduct()
             {
-                IdProduct=_existProduct.Id,
+                IdProduct=_existProductPricePerLb.Id,
                 QTY=1m,
             });
 
             var resultOrder = _orderService.AddProductInOrder(order.Id, new AddOrderToProductModel()
             {
-                SKU = _existProduct.SKU,
+                SKU = _existProductPricePerLb.SKU,
                 QTY = 1m,
             });
 
@@ -144,7 +150,7 @@ namespace CheckoutKataAPI.Test.Services
 
             var resultOrder = _orderService.AddProductInOrder(order.Id, new AddOrderToProductModel()
             {
-                SKU = _existProduct.SKU,
+                SKU = _existProductPricePerLb.SKU,
                 QTY = 1.5m,
             });
             
@@ -166,7 +172,7 @@ namespace CheckoutKataAPI.Test.Services
         public void DeleteExistInStoreProductFromNotExistOrderAndThrowException()
         {
             var exception = Assert.ThrowsAny<AppValidationException>(() => _orderService.DeleteProductInOrder(1000,
-                _existProduct.SKU));
+                _existProductPricePerLb.SKU));
             Assert.Contains("Invalid order id", exception.Messages.Select(p => p.Message));
         }
 
@@ -176,7 +182,7 @@ namespace CheckoutKataAPI.Test.Services
             var order = _orderRepository.Add(new Order());
 
             var exception = Assert.ThrowsAny<AppValidationException>(() => _orderService.DeleteProductInOrder(order.Id,
-                _existProduct.SKU));
+                _existProductPricePerLb.SKU));
             Assert.Contains("The given product doesn't exist in the order", exception.Messages.Select(p => p.Message));
         }
 
@@ -186,13 +192,13 @@ namespace CheckoutKataAPI.Test.Services
             var order = _orderRepository.Add(new Order());
             order.OrderToProducts.Add(new OrderToProduct()
             {
-                IdProduct=_existProduct.Id,
+                IdProduct=_existProductPricePerLb.Id,
                 QTY=1m,
                 IdUsedBuyGetPromotion=11,
             });
 
             var exception = Assert.ThrowsAny<AppValidationException>(() => _orderService.DeleteProductInOrder(order.Id,
-                _existProduct.SKU));
+                _existProductPricePerLb.SKU));
             Assert.Contains("Deleting promotion product isn't permitted", exception.Messages.Select(p => p.Message));
         }
 
@@ -202,12 +208,27 @@ namespace CheckoutKataAPI.Test.Services
             var order = _orderRepository.Add(new Order());
             order.OrderToProducts.Add(new OrderToProduct()
             {
-                IdProduct=_existProduct.Id,
+                IdProduct=_existProductPricePerLb.Id,
                 QTY=1m,
             });
 
-            order = _orderService.DeleteProductInOrder(order.Id, _existProduct.SKU);
+            order = _orderService.DeleteProductInOrder(order.Id, _existProductPricePerLb.SKU);
             Assert.Equal(0, order.OrderToProducts.Count);
+        }
+
+        [Fact]
+        public void AddInOrderProductWithPricePerEachWithNotWholeQTYAndThrowException()
+        {
+            var order = _orderRepository.Add(new Order());
+
+            var exception = Assert.ThrowsAny<AppValidationException>(() => _orderService.AddProductInOrder(order.Id,
+                new AddOrderToProductModel()
+                {
+                    SKU = _existProductPricePerEach.SKU,
+                    QTY = 1.5m,
+                }));
+            Assert.Contains("Fractional QTY isn't avaliable for a product with price per each item",
+                exception.Messages.Select(p => p.Message));
         }
     }
 }

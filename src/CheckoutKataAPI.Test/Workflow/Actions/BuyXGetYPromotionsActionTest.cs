@@ -28,13 +28,13 @@ namespace CheckoutKataAPI.Test.Workflow.Actions
         {
             Id = 11,
             Price = 10.5m,
-            PriceType = PriceType.PerQuantity
+            PriceType = PriceType.PerEach
         };
         private readonly Product _secondGetPromoProduct = new Product()
         {
             Id = 12,
             Price = 10.5m,
-            PriceType = PriceType.PerQuantity
+            PriceType = PriceType.PerEach
         };
 
         public BuyXGetYPromotionsActionTest()
