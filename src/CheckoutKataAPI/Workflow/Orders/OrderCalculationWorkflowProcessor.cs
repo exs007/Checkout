@@ -1,5 +1,6 @@
 ﻿using CheckoutKataAPI.Models;
 using CheckoutKataAPI.Workflow.Base;
+using CheckoutKataAPI.Workflow.Orders.Actions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,10 @@ namespace CheckoutKataAPI.Workflow.Orders
     {
         public OrderCalculationWorkflowProcessor(IServiceProvider provider) : base(provider)
         {
-            //TODO: setup actions list
+            SetupAction<SetupOrderedProductsInfoAction>();
+            SetupAction<SetupActivePromotionsAction>();
+            SetupAction<BuyXGetYPromotionsAction>();
+            SetupAction<PricePromotionsAction>();
         }
 
         public OrderCalculationContext CalculateOrder(OrderCalculationContext context)

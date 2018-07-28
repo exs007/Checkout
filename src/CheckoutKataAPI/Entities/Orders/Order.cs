@@ -5,10 +5,8 @@ using System.Threading.Tasks;
 
 namespace CheckoutKataAPI.Entities.Orders
 {
-    public class Order
+    public class Order : BaseEntity
     {
-        public int Id { get; set; }
-
         public ICollection<OrderToProduct> OrderToProducts {get;set;}
 
         public decimal Total {get;set;}

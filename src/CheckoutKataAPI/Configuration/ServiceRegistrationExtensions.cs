@@ -27,6 +27,7 @@ namespace CheckoutKataAPI.Configuration
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IPromotionService, PromotionService>();
             services.AddScoped<IOrderCalculationWorkflowProcessor, OrderCalculationWorkflowProcessor>();
+            services.AddScoped<IOrderService, OrderService>();
 
             return services;
         }
