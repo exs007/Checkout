@@ -15,7 +15,7 @@ namespace CheckoutKataAPI.Workflow.Orders.Actions
         public void ExecuteAction(OrderCalculationContext context, IWorkflowProcessorContext processorContext)
         {
             var productsInOrderWithoutPromotions = context.SourceOrder.OrderToProducts.
-                Where(p => !p.IdUsedPromotion.HasValue).ToList();
+                Where(p => !p.IdUsedBuyGetPromotion.HasValue).ToList();
 
             var productService = processorContext.Resolve<IProductService>();
             var products = productService.GetProducts(productsInOrderWithoutPromotions.Select(p=>p.IdProduct).ToList());

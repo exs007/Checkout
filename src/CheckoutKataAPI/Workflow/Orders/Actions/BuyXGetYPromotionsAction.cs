@@ -39,7 +39,7 @@ namespace CheckoutKataAPI.Workflow.Orders.Actions
             {
                 var productIds = appliedPromotionInfos.SelectMany(p => p.Item1.GetItems).Select(p=>p.IdProduct).ToList();
                 var productService = processorContext.Resolve<IProductService>();
-                var products = productService.GetProducts(productIds);
+                var products = productService.GetProducts(productIds, true);
                 SetPricesForPromoProducts(context, products, appliedPromotionInfos);
             }
         }
@@ -78,7 +78,7 @@ namespace CheckoutKataAPI.Workflow.Orders.Actions
 
                     var orderToProduct = new OrderToProduct();
                     orderToProduct.IdProduct = getItem.IdProduct;
-                    orderToProduct.IdUsedPromotion = item.Item1.Id;
+                    orderToProduct.IdUsedBuyGetPromotion = item.Item1.Id;
                     // applied time * qty from getItem
                     orderToProduct.QTY = item.Item2 * getItem.QTY;
                     orderToProduct.Price = Math.Round(sourceProduct.Price * (100 - getItem.PercentDiscount) / 100, 2);

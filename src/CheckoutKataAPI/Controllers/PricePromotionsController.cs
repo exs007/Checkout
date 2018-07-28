@@ -13,11 +13,11 @@ namespace CheckoutKataAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class BuyGetPromotionsController : BaseApiController 
+    public class PricePromotionsController : BaseApiController 
     {
         private readonly IPromotionService _promotionService;
 
-        public BuyGetPromotionsController(IPromotionService promotionService)
+        public PricePromotionsController(IPromotionService promotionService)
         {
             _promotionService = promotionService;
         }

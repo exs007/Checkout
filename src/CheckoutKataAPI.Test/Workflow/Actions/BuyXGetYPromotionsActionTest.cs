@@ -41,7 +41,7 @@ namespace CheckoutKataAPI.Test.Workflow.Actions
         {       
             var executingContextSetup = new Mock<IWorkflowProcessorContext>();
             var productServiceSetup = new Mock<IProductService>();
-            productServiceSetup.Setup(p => p.GetProducts(new List<int>() {11, 12})).Returns(new List<Product>()
+            productServiceSetup.Setup(p => p.GetProducts(new List<int>() {11, 12}, true)).Returns(new List<Product>()
             {
                 _firstGetPromoProduct,
                 _secondGetPromoProduct
@@ -110,7 +110,7 @@ namespace CheckoutKataAPI.Test.Workflow.Actions
         }
 
         [Fact]
-        public void GetTwoPromoProductRecrodsOnOneRuleAndValidateQTYs()
+        public void GetTwoPromoProductRecordsOnOneRuleAndValidateQTYs()
         {
             var context = GetContextForBuyTwoGetTwoOneRule();
             _action.ExecuteAction(context, _executingContext);
@@ -123,7 +123,7 @@ namespace CheckoutKataAPI.Test.Workflow.Actions
         }
 
         [Fact]
-        public void GetTwoPromoProductRecrodsOnOneRuleAndValidatePrices()
+        public void GetTwoPromoProductRecordsOnOneRuleAndValidatePrices()
         {
             var context = GetContextForBuyTwoGetTwoOneRule();
             _action.ExecuteAction(context, _executingContext);
@@ -136,20 +136,20 @@ namespace CheckoutKataAPI.Test.Workflow.Actions
         }
 
         [Fact]
-        public void GetTwoPromoProductRecrodsOnOneRuleAndChechMarkedAsPromotionProducts()
+        public void GetTwoPromoProductRecordsOnOneRuleAndChechMarkedAsPromotionProducts()
         {
             var context = GetContextForBuyTwoGetTwoOneRule();
             _action.ExecuteAction(context, _executingContext);
 
             Assert.Equal(4, context.OrderToProducts.Count);
             var firstPromotionProduct = context.OrderToProducts.FirstOrDefault(p => p.IdProduct == 11);
-            Assert.True(firstPromotionProduct?.IdUsedPromotion ==1);
+            Assert.True(firstPromotionProduct?.IdUsedBuyGetPromotion ==1);
             var secondPromotionProduct = context.OrderToProducts.FirstOrDefault(p => p.IdProduct == 12);
-            Assert.True(secondPromotionProduct?.IdUsedPromotion ==1);
+            Assert.True(secondPromotionProduct?.IdUsedBuyGetPromotion ==1);
         }
 
         [Fact]
-        public void GetTwoPromoProductRecrodsOnOneRuleWithOneTimeLimitAndValidateQTYs()
+        public void GetTwoPromoProductRecordsOnOneRuleWithOneTimeLimitAndValidateQTYs()
         {
             var context = GetContextForBuyTwoGetTwoOneRule(1);
             _action.ExecuteAction(context, _executingContext);
@@ -243,6 +243,50 @@ namespace CheckoutKataAPI.Test.Workflow.Actions
 
             Assert.Equal(1, context.OrderToProducts.Count);
             Assert.True(context.OrderToProducts.FirstOrDefault(p => p.IdProduct == 1)!=null);
+        }
+
+        [Fact]
+        public void TryToApplyBuyGetRuleWithNotExistInStoreProductFromGetSectionAndCheckThatItWasNotAdded()
+        {
+            var context = new OrderCalculationContext(new Order(){ Id=1 });
+            context.OrderToProducts = new List<OrderToProduct>()
+            {
+                new OrderToProduct()
+                {
+                    IdProduct = 1,
+                    QTY = 4,
+                }
+            };
+            context.ActivePromotions = new List<BasePromotion>()
+            {
+                new BuyXGetYPromotion()
+                {
+                    Id=1,
+                    BuyItems = new List<BuyPromotionItem>()
+                    {
+                        new BuyPromotionItem()
+                        {
+                            IdProduct=1,
+                            QTY=2,
+                        },
+                    },
+                    GetItems = new List<GetPromotionItem>()
+                    {
+                        new GetPromotionItem()
+                        {
+                            IdProduct=21,
+                            QTY=2,
+                            PercentDiscount=100,
+                        },
+                    }
+                }
+            };
+
+            context.ActivePromotions = new List<BasePromotion>();
+            _action.ExecuteAction(context, _executingContext);
+
+            Assert.Equal(1, context.OrderToProducts.Count);
+            Assert.True(context.OrderToProducts.FirstOrDefault(p => p.IdProduct == 21)==null);
         }
     }
 }

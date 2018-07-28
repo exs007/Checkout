@@ -9,7 +9,7 @@ namespace CheckoutKataAPI.Services
 {
     public interface IProductService
     {
-        ICollection<Product> GetProducts(ICollection<int> ids);
+        ICollection<Product> GetProducts(ICollection<int> ids, bool ignoreNotFoundProducts=false);
 
         Product GetProduct(string sku);
 

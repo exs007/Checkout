@@ -188,7 +188,7 @@ namespace CheckoutKataAPI.Test.Services
             {
                 IdProduct=_existProduct.Id,
                 QTY=1m,
-                IdUsedPromotion=11,
+                IdUsedBuyGetPromotion=11,
             });
 
             var exception = Assert.ThrowsAny<AppValidationException>(() => _orderService.DeleteProductInOrder(order.Id,

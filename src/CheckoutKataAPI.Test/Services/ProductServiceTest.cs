@@ -77,14 +77,23 @@ namespace CheckoutKataAPI.Test.Services
         }
 
         [Fact]
-        public void SelectNotExistProductsByIdsFromRepository()
+        public void SelectNotExistProductByIdAndThrowException()
         {
             var id = 1000000;
             var ids = new List<int>(){ id };
-            _productRepository.Delete(id);
 
             var exception = Assert.Throws<AppValidationException>(() => _productService.GetProducts(ids));
             Assert.Contains("Invalid product id", exception.Messages.Select(p=>p.Message));
+        }
+
+        [Fact]
+        public void SelectNotExistProductByIdWithIgnoreNotFoundParamAndGetEmptyCollection()
+        {
+            var id = 1000000;
+            var ids = new List<int>(){ id };
+
+            var products = _productService.GetProducts(ids, true);
+            Assert.Equal(0, products.Count);
         }
 
         [Fact]

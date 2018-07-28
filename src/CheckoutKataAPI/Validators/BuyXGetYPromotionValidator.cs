@@ -17,7 +17,7 @@ namespace CheckoutKataAPI.Validators
                 .MaximumLength(ValidationConstants.DEFAULT_TEXT_FIELD_MAX_SIZE);
 
             RuleFor(p => p.ApplyLimit)
-                .Must(p => p > 0);
+                .Must(p => !p.HasValue || p.Value > 0);
 
             RuleFor(p => p.BuyItems)
                 .SetCollectionValidator(new BuyPromotionItemValidator());

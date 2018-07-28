@@ -80,7 +80,7 @@ namespace CheckoutKataAPI.Services
                 throw new AppValidationException("The given product doesn't exist in the order");
             }
 
-            if (orderToProductForDelete.IdUsedPromotion.HasValue)
+            if (orderToProductForDelete.IdUsedBuyGetPromotion.HasValue)
             {
                 throw new AppValidationException("Deleting promotion product isn't permitted");
             }

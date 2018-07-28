@@ -48,7 +48,7 @@ namespace CheckoutKataAPI.Test.Workflow.Actions
                 {
                     IdProduct = 11,
                     Price = _promoOrderToProductPrice,
-                    IdUsedPromotion = 1
+                    IdUsedBuyGetPromotion = 1
                 }
             };
         }

@@ -28,7 +28,7 @@ namespace CheckoutKataAPI.Test.Workflow.Actions
         {
             var executingContextSetup = new Mock<IWorkflowProcessorContext>();
             var productServiceSetup = new Mock<IProductService>();
-            productServiceSetup.Setup(p => p.GetProducts(new List<int>() {1, 2})).Returns(new List<Product>()
+            productServiceSetup.Setup(p => p.GetProducts(new List<int>() {1, 2}, false)).Returns(new List<Product>()
             {
                 new Product()
                 {
@@ -43,7 +43,7 @@ namespace CheckoutKataAPI.Test.Workflow.Actions
                     PriceType =PriceType.PerLb
                 },
             });
-            productServiceSetup.Setup(p => p.GetProducts(new List<int>() {})).Returns(new List<Product>()
+            productServiceSetup.Setup(p => p.GetProducts(new List<int>() {}, false)).Returns(new List<Product>()
             {
             });
 
@@ -104,7 +104,7 @@ namespace CheckoutKataAPI.Test.Workflow.Actions
                     {
                         IdProduct=5,
                         QTY=5,
-                        IdUsedPromotion =10
+                        IdUsedBuyGetPromotion =10
                     },
                 }
             });

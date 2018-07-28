@@ -18,7 +18,7 @@ namespace CheckoutKataAPI.Services
             _productRepository = productRepository;
         }
 
-        public ICollection<Product> GetProducts(ICollection<int> ids)
+        public ICollection<Product> GetProducts(ICollection<int> ids, bool ignoreNotFoundProducts=false)
         {
             var toReturn = new List<Product>();
 
@@ -27,10 +27,15 @@ namespace CheckoutKataAPI.Services
                 var product = _productRepository.Select(id);
                 if (product == null)
                 {
-                    throw new AppValidationException("Invalid product id");
+                    if (!ignoreNotFoundProducts)
+                    {
+                        throw new AppValidationException("Invalid product id");
+                    }
                 }
-
-                toReturn.Add(product);
+                else
+                {
+                    toReturn.Add(product);
+                }
             }
 
             return toReturn;
@@ -38,7 +43,7 @@ namespace CheckoutKataAPI.Services
 
         public Product GetProduct(string sku)
         {
-            var items = _productRepository.Select(p => p.SKU == sku);
+            var items = _productRepository.Select(p =>StringComparer.InvariantCultureIgnoreCase.Equals(p.SKU, sku));
             if (items.Count > 1)
             {
                 throw new Exception("Multiple products with the same SKU");
