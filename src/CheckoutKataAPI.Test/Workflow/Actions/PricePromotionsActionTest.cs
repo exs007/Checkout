@@ -18,24 +18,9 @@ namespace CheckoutKataAPI.Test.Workflow.Actions
         private readonly IWorkflowProcessorContext _executingContext;
         private readonly PricePromotionsAction _action;
         private readonly OrderCalculationContext _context;
-        private readonly OrderToProduct _firstOrderToProduct = new OrderToProduct()
-        {
-            IdProduct = 1,
-            QTY =1,
-            Price = 10.5m,
-        };
-        private readonly OrderToProduct _secondOrderToProduct = new OrderToProduct()
-        {
-            IdProduct = 2,
-            QTY =1.5m,
-            Price = 11m,
-        };
-        private readonly OrderToProduct _promoOrderToProduct = new OrderToProduct()
-        {
-            IdProduct = 11,
-            Price = 10m,
-            IdUsedPromotion = 1
-        };
+        private readonly decimal _firstOrderToProductPrice = 10.5m;
+        private readonly decimal _secondOrderToProductPrice = 11m;
+        private readonly decimal _promoOrderToProductPrice = 10m;
 
         public PricePromotionsActionTest()
         {
@@ -47,9 +32,24 @@ namespace CheckoutKataAPI.Test.Workflow.Actions
             });
             _context.OrderToProducts = new List<OrderToProduct>()
             {
-                _firstOrderToProduct,
-                _secondOrderToProduct,
-                _promoOrderToProduct
+                new  OrderToProduct()
+                {
+                    IdProduct = 1,
+                    QTY =1,
+                    Price = _firstOrderToProductPrice,
+                },
+                new OrderToProduct()
+                {
+                    IdProduct = 2,
+                    QTY =1.5m,
+                    Price = _secondOrderToProductPrice,
+                },
+                new OrderToProduct()
+                {
+                    IdProduct = 11,
+                    Price = _promoOrderToProductPrice,
+                    IdUsedPromotion = 1
+                }
             };
         }
 
@@ -70,10 +70,10 @@ namespace CheckoutKataAPI.Test.Workflow.Actions
             };
             _action.ExecuteAction(_context, _executingContext);
 
-            Assert.True(_context.OrderToProducts.First(p => p.IdProduct == _firstOrderToProduct.IdProduct).
-                            Price == _firstOrderToProduct.Price - 2.5m);
-            Assert.True(_context.OrderToProducts.First(p => p.IdProduct == _secondOrderToProduct.IdProduct).
-                            Price == _secondOrderToProduct.Price - 2.5m);
+            Assert.True(_context.OrderToProducts.First(p => p.IdProduct == 1).
+                            Price == _firstOrderToProductPrice - 2.5m);
+            Assert.True(_context.OrderToProducts.First(p => p.IdProduct == 2).
+                            Price == _secondOrderToProductPrice - 2.5m);
         }
 
         [Fact]
@@ -102,8 +102,8 @@ namespace CheckoutKataAPI.Test.Workflow.Actions
             };
             _action.ExecuteAction(_context, _executingContext);
 
-            Assert.True(_context.OrderToProducts.First(p => p.IdProduct == _firstOrderToProduct.IdProduct).
-                            Price == _firstOrderToProduct.Price - 5m);
+            Assert.True(_context.OrderToProducts.First(p => p.IdProduct == 1).
+                            Price == _firstOrderToProductPrice - 5m);
         }
 
         [Fact]
@@ -123,7 +123,7 @@ namespace CheckoutKataAPI.Test.Workflow.Actions
             };
             _action.ExecuteAction(_context, _executingContext);
 
-            Assert.True(_context.OrderToProducts.First(p => p.IdProduct == _firstOrderToProduct.IdProduct).
+            Assert.True(_context.OrderToProducts.First(p => p.IdProduct == 1).
                             Price >= 0);
         }
 
@@ -144,8 +144,8 @@ namespace CheckoutKataAPI.Test.Workflow.Actions
             };
             _action.ExecuteAction(_context, _executingContext);
 
-            Assert.True(_context.OrderToProducts.First(p => p.IdProduct == _promoOrderToProduct.IdProduct).
-                            Price == _promoOrderToProduct.Price);
+            Assert.True(_context.OrderToProducts.First(p => p.IdProduct == 11).
+                            Price == _promoOrderToProductPrice);
         }
 
         [Fact]
@@ -165,10 +165,10 @@ namespace CheckoutKataAPI.Test.Workflow.Actions
             };
             _action.ExecuteAction(_context, _executingContext);
 
-            Assert.True(_context.OrderToProducts.First(p => p.IdProduct == _firstOrderToProduct.IdProduct).
-                            Price == _promoOrderToProduct.Price);
-            Assert.True(_context.OrderToProducts.First(p => p.IdProduct == _secondOrderToProduct.IdProduct).
-                            Price == _secondOrderToProduct.Price);
+            Assert.True(_context.OrderToProducts.First(p => p.IdProduct == 1).
+                            Price == _firstOrderToProductPrice);
+            Assert.True(_context.OrderToProducts.First(p => p.IdProduct == 2).
+                            Price == _secondOrderToProductPrice);
         }
     }
 }

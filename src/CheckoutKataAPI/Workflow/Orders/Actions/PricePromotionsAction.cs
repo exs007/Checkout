@@ -1,4 +1,5 @@
 ﻿using CheckoutKataAPI.Entities.Orders;
+using CheckoutKataAPI.Entities.Promotions;
 using CheckoutKataAPI.Models;
 using CheckoutKataAPI.Services;
 using CheckoutKataAPI.Workflow.Base;
@@ -14,6 +15,18 @@ namespace CheckoutKataAPI.Workflow.Orders.Actions
     {
         public void ExecuteAction(OrderCalculationContext context, IWorkflowProcessorContext processorContext)
         {
+            var pricePromotions = context.ActivePromotions.Where(p => p is PricePromotion)
+                .Select(p => (PricePromotion) p).ToList();
+            foreach (var orderToProduct in context.OrderToProducts.Where(p=>!p.IdUsedPromotion.HasValue))
+            {
+                var biggestPromotion = pricePromotions.Where(p => p.AssignedProductIds.Contains(orderToProduct.IdProduct))
+                    .OrderByDescending(p => p.PriceDiscount).FirstOrDefault();
+
+                if (biggestPromotion != null)
+                {
+                    orderToProduct.Price = Math.Max(orderToProduct.Price - biggestPromotion.PriceDiscount, 0);
+                }
+            }
         }
     }
 }
