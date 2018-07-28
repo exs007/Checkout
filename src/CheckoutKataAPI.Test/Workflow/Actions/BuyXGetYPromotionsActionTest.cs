@@ -24,15 +24,15 @@ namespace CheckoutKataAPI.Test.Workflow.Actions
     {
         private readonly IWorkflowProcessorContext _executingContext;
         private readonly BuyXGetYPromotionsAction _action;
-        private readonly Product _firstPromoProduct = new Product()
+        private readonly Product _firstGetPromoProduct = new Product()
         {
             Id = 11,
             Price = 10.5m,
             PriceType = PriceType.PerQuantity
         };
-        private readonly Product _secondPromoProduct = new Product()
+        private readonly Product _secondGetPromoProduct = new Product()
         {
-            Id = 11,
+            Id = 12,
             Price = 10.5m,
             PriceType = PriceType.PerQuantity
         };
@@ -43,8 +43,8 @@ namespace CheckoutKataAPI.Test.Workflow.Actions
             var productServiceSetup = new Mock<IProductService>();
             productServiceSetup.Setup(p => p.GetProducts(new List<int>() {11, 12})).Returns(new List<Product>()
             {
-                _firstPromoProduct,
-                _secondPromoProduct
+                _firstGetPromoProduct,
+                _secondGetPromoProduct
             });
 
             executingContextSetup.Setup(p=>p.Resolve<IProductService>()).
@@ -55,23 +55,20 @@ namespace CheckoutKataAPI.Test.Workflow.Actions
 
         private OrderCalculationContext GetContextForBuyTwoGetTwoOneRule(int? limit=null)
         {
-            var context = new OrderCalculationContext(new Order()
+            var context = new OrderCalculationContext(new Order(){ Id=1 });
+            context.OrderToProducts = new List<OrderToProduct>()
             {
-                Id=1,
-                OrderToProducts = new List<OrderToProduct>()
+                new OrderToProduct()
                 {
-                    new OrderToProduct()
-                    {
-                        IdProduct=1,
-                        QTY = 4,
-                    },
-                    new OrderToProduct()
-                    {
-                        IdProduct=2,
-                        QTY = 2,
-                    }
+                    IdProduct = 1,
+                    QTY = 4,
                 },
-            });
+                new OrderToProduct()
+                {
+                    IdProduct = 2,
+                    QTY = 2,
+                }
+            };
             context.ActivePromotions = new List<BasePromotion>()
             {
                 new BuyXGetYPromotion()
@@ -166,18 +163,15 @@ namespace CheckoutKataAPI.Test.Workflow.Actions
 
         private OrderCalculationContext GetContextWithMultipleRulesForTheSameProduct()
         {
-            var context = new OrderCalculationContext(new Order()
+            var context = new OrderCalculationContext(new Order(){ Id=1 });
+            context.OrderToProducts = new List<OrderToProduct>()
             {
-                Id=1,
-                OrderToProducts = new List<OrderToProduct>()
+                new OrderToProduct()
                 {
-                    new OrderToProduct()
-                    {
-                        IdProduct=1,
-                        QTY = 4,
-                    }
-                },
-            });
+                    IdProduct = 1,
+                    QTY = 4,
+                }
+            };
             context.ActivePromotions = new List<BasePromotion>()
             {
                 new BuyXGetYPromotion()
@@ -217,7 +211,7 @@ namespace CheckoutKataAPI.Test.Workflow.Actions
                         new GetPromotionItem()
                         {
                             IdProduct=12,
-                            QTY=1,
+                            QTY=1.1m,
                             PercentDiscount=50,
                         }
                     }
@@ -228,22 +222,22 @@ namespace CheckoutKataAPI.Test.Workflow.Actions
         }
 
         [Fact]
-        public void GetPromoProductRecordPerPerRuleForTwoRulesAndCheckQTYs()
+        public void GetPromoProductRecordPerRuleForTwoRulesAndCheckQTYs()
         {
-            var context = GetContextForBuyTwoGetTwoOneRule();
+            var context = GetContextWithMultipleRulesForTheSameProduct();
             _action.ExecuteAction(context, _executingContext);
             
             Assert.Equal(3, context.OrderToProducts.Count);
             var firstPromotionProduct = context.OrderToProducts.FirstOrDefault(p => p.IdProduct == 11);
-            Assert.True(firstPromotionProduct?.QTY ==2);
+            Assert.True(firstPromotionProduct?.QTY ==4);
             var secondPromotionProduct = context.OrderToProducts.FirstOrDefault(p => p.IdProduct == 12);
-            Assert.True(secondPromotionProduct?.QTY ==4);
+            Assert.True(secondPromotionProduct?.QTY ==4.4m);
         }
 
         [Fact]
         public void GetNoPromoProductsByRules()
         {
-            var context = GetContextForBuyTwoGetTwoOneRule();
+            var context = GetContextWithMultipleRulesForTheSameProduct();
             context.ActivePromotions = new List<BasePromotion>();
             _action.ExecuteAction(context, _executingContext);
 

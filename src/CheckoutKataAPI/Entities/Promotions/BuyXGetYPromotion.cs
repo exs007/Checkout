@@ -13,7 +13,7 @@ namespace CheckoutKataAPI.Entities.Promotions
             GetItems = new List<GetPromotionItem>();
         }
 
-        public decimal? ApplyLimit { get; set; }
+        public int? ApplyLimit { get; set; }
 
         public ICollection<BuyPromotionItem> BuyItems { get; set; }
 

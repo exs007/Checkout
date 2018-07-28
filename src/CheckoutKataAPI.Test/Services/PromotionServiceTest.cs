@@ -28,7 +28,7 @@ namespace CheckoutKataAPI.Test.Services
                 Fill(p => p.AssignedProductIds, new List<int>() { 1, 2 });
             A.Configure<BuyXGetYPromotion>().
                 Fill(p => p.Id, 0).
-                Fill(p => p.ApplyLimit, (decimal?)null).
+                Fill(p => p.ApplyLimit, (int?)null).
                 Fill(p => p.BuyItems, new List<BuyPromotionItem>()
                 {
                     new BuyPromotionItem()
