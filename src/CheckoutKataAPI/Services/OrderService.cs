@@ -26,7 +26,7 @@ namespace CheckoutKataAPI.Services
             _orderRepository = orderRepository;
         }
 
-        public Order GetOrder(int sku)
+        public Order GetOrder(int id)
         {
             throw new NotImplementedException();
         }

@@ -11,7 +11,7 @@ namespace CheckoutKataAPI.Services
 {
     public interface IOrderService
     {
-        Order GetOrder(int sku);
+        Order GetOrder(int id);
 
         Order CreateNewOrder();
 
