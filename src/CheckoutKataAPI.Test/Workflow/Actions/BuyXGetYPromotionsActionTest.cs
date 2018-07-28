@@ -132,7 +132,7 @@ namespace CheckoutKataAPI.Test.Workflow.Actions
             var firstPromotionProduct = context.OrderToProducts.FirstOrDefault(p => p.IdProduct == 11);
             Assert.True(firstPromotionProduct?.Price ==0);
             var secondPromotionProduct = context.OrderToProducts.FirstOrDefault(p => p.IdProduct == 12);
-            Assert.True(secondPromotionProduct?.Price == _secondPromoProduct.Price * 0.5m);
+            Assert.True(secondPromotionProduct?.Price == _secondGetPromoProduct.Price * 0.5m);
         }
 
         [Fact]
