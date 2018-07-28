@@ -52,6 +52,10 @@ namespace CheckoutKataAPI.Services
 
             var order = GetOrderFromRepository(idOrder);
             var product = GetProduct(item.SKU);
+            if (product.PriceType == PriceType.PerEach && (item.QTY - Math.Floor(item.QTY))!=0)
+            {
+                throw new AppValidationException("Fractional QTY isn't avaliable for a product with price per each item");
+            }
 
             var orderToProduct = order.OrderToProducts.FirstOrDefault(p=>p.IdProduct==product.Id);
             if (orderToProduct == null)
