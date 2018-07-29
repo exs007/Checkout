@@ -203,7 +203,7 @@ namespace CheckoutKataAPI.Test.Services
         }
 
         [Fact]
-        public void DeleteExistInStoreProductFromExistOrderAndThatItWasRemovedFromOrder()
+        public void DeleteExistInStoreProductFromExistOrderAndCheckThatItWasRemovedFromOrder()
         {
             var order = _orderRepository.Add(new Order());
             order.OrderToProducts.Add(new OrderToProduct()
