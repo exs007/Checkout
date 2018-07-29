@@ -19,6 +19,8 @@ Price promotions don't work for products which were added by Buy X Get Y promoti
 7. Remove a product from an order based on SKU and get current order's total.
 
 ## API Endpoints:
+### Base api url - `http://localhost:5000`
+
 - `/api/products` `Method: POST` - Setup a product. Example of JSON: `{"SKU": "Product1", "PriceType": 2, "Price": 1.5}`.
 PriceType possible values: 1 - price per each item, 2 - price per lb. Returns a product with assigned Id.
 
