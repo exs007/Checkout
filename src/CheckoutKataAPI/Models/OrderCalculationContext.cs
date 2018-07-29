@@ -33,6 +33,7 @@ namespace CheckoutKataAPI.Models
         {
             var toReturn = new Order();
             toReturn.Id = SourceOrder.Id;
+            toReturn.StatusCode = SourceOrder.StatusCode;
             toReturn.OrderToProducts = OrderToProducts;
             toReturn.Total = Total;
 
