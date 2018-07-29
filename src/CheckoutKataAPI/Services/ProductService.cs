@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CheckoutKataAPI.Constants;
 using CheckoutKataAPI.DAL;
 using CheckoutKataAPI.Entities;
 using CheckoutKataAPI.Entities.Products;
@@ -29,7 +30,7 @@ namespace CheckoutKataAPI.Services
                 {
                     if (!ignoreNotFoundProducts)
                     {
-                        throw new AppValidationException("Invalid product id");
+                        throw new AppValidationException(MessageConstants.NOT_FOUND_PRODUCT_ID);
                     }
                 }
                 else
@@ -46,7 +47,7 @@ namespace CheckoutKataAPI.Services
             var items = _productRepository.Select(p =>StringComparer.InvariantCultureIgnoreCase.Equals(p.SKU, sku));
             if (items.Count > 1)
             {
-                throw new Exception("Multiple products with the same SKU");
+                throw new Exception(MessageConstants.INVALID_SETUP_MULTIPLE_PRODUCTS_WITH_SAME_SKU);
             }
 
             return items.FirstOrDefault();
@@ -56,13 +57,13 @@ namespace CheckoutKataAPI.Services
         {
             if (!Enum.IsDefined(typeof(PriceType), item.PriceType))
             {
-                throw new AppValidationException(nameof(item.PriceType), "Invalid price type");
+                throw new AppValidationException(nameof(item.PriceType), MessageConstants.NOT_VALID_PRICE_TYPE_IN_PRODUCT);
             }
 
             var duplicatesExist = _productRepository.Select(p => p.SKU == item.SKU).Any();
             if (duplicatesExist)
             {
-                throw new AppValidationException(nameof(item.SKU), "Exist SKU");
+                throw new AppValidationException(nameof(item.SKU), MessageConstants.PRODUCT_SKU_DUPLICATE);
             }
 
             return _productRepository.Add(item);

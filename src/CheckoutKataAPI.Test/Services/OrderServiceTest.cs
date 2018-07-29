@@ -8,13 +8,13 @@ using System.Text;
 using CheckoutKataAPI.Models;
 using CheckoutKataAPI.Entities.Orders;
 using Xunit;
-using CheckoutKataAPI.Entities.Promotions;
 using CheckoutKataAPI.Services;
 using CheckoutKataAPI.DAL;
 using CheckoutKataAPI.Test.DAL;
 using CheckoutKataAPI.Entities.Products;
 using CheckoutKataAPI.Workflow.Orders;
 using CheckoutKataAPI.Exceptions;
+using CheckoutKataAPI.Constants;
 
 namespace CheckoutKataAPI.Test.Services
 {
@@ -85,7 +85,7 @@ namespace CheckoutKataAPI.Test.Services
         public void TryToGetNotExistOrderFromServiceAndThrowException()
         {
             var exception = Assert.ThrowsAny<AppValidationException>(()=> _orderService.GetOrder(1000));
-            Assert.Contains("Invalid order id", exception.Messages.Select(p => p.Message));
+            Assert.Contains(MessageConstants.NOT_FOUND_ORDER_ID, exception.Messages.Select(p => p.Message));
         }
 
         [Fact]
@@ -99,7 +99,7 @@ namespace CheckoutKataAPI.Test.Services
                     SKU = _notExistProductSku,
                     QTY = 1,
                 }));
-            Assert.Contains("Invalid product SKU", exception.Messages.Select(p => p.Message));
+            Assert.Contains(MessageConstants.NOT_FOUND_PRODUCT_BY_SKU_CODE, exception.Messages.Select(p => p.Message));
         }
 
         [Fact]
@@ -111,7 +111,7 @@ namespace CheckoutKataAPI.Test.Services
                     SKU = _notExistProductSku,
                     QTY = 1,
                 }));
-            Assert.Contains("Invalid order id", exception.Messages.Select(p => p.Message));
+            Assert.Contains(MessageConstants.NOT_FOUND_ORDER_ID, exception.Messages.Select(p => p.Message));
         }
 
         [Fact]
@@ -121,7 +121,7 @@ namespace CheckoutKataAPI.Test.Services
 
             var exception = Assert.ThrowsAny<AppValidationException>(() => _orderService.AddProductInOrder(order.Id,
                 null));
-            Assert.Contains("Add product model isn't specififed", exception.Messages.Select(p => p.Message));
+            Assert.Contains(MessageConstants.ADD_PRODUCT_MODEL_IS_EMPTY, exception.Messages.Select(p => p.Message));
         }
 
         [Fact]
@@ -165,7 +165,7 @@ namespace CheckoutKataAPI.Test.Services
 
             var exception = Assert.ThrowsAny<AppValidationException>(() => _orderService.DeleteProductInOrder(order.Id,
                 _notExistProductSku));
-            Assert.Contains("Invalid product SKU", exception.Messages.Select(p => p.Message));
+            Assert.Contains(MessageConstants.NOT_FOUND_PRODUCT_BY_SKU_CODE, exception.Messages.Select(p => p.Message));
         }
 
         [Fact]
@@ -173,7 +173,7 @@ namespace CheckoutKataAPI.Test.Services
         {
             var exception = Assert.ThrowsAny<AppValidationException>(() => _orderService.DeleteProductInOrder(1000,
                 _existProductPricePerLb.SKU));
-            Assert.Contains("Invalid order id", exception.Messages.Select(p => p.Message));
+            Assert.Contains(MessageConstants.NOT_FOUND_ORDER_ID, exception.Messages.Select(p => p.Message));
         }
 
         [Fact]
@@ -183,7 +183,7 @@ namespace CheckoutKataAPI.Test.Services
 
             var exception = Assert.ThrowsAny<AppValidationException>(() => _orderService.DeleteProductInOrder(order.Id,
                 _existProductPricePerLb.SKU));
-            Assert.Contains("The given product doesn't exist in the order", exception.Messages.Select(p => p.Message));
+            Assert.Contains(MessageConstants.PRODUCT_NOT_EXIST_IN_ORDER, exception.Messages.Select(p => p.Message));
         }
 
         [Fact]
@@ -199,7 +199,7 @@ namespace CheckoutKataAPI.Test.Services
 
             var exception = Assert.ThrowsAny<AppValidationException>(() => _orderService.DeleteProductInOrder(order.Id,
                 _existProductPricePerLb.SKU));
-            Assert.Contains("Deleting promotion product isn't permitted", exception.Messages.Select(p => p.Message));
+            Assert.Contains(MessageConstants.DELETE_PROMO_PRODUCT_NOT_PERMITTED_IN_ORDER, exception.Messages.Select(p => p.Message));
         }
 
         [Fact]
@@ -227,7 +227,7 @@ namespace CheckoutKataAPI.Test.Services
                     SKU = _existProductPricePerEach.SKU,
                     QTY = 1.5m,
                 }));
-            Assert.Contains("Fractional QTY isn't avaliable for a product with price per each item",
+            Assert.Contains(MessageConstants.FRACTIONAL_QTY_NOT_AVALIABLE_IN_ORDER_FOR_PRODUCT_WITH_LB_PRICE,
                 exception.Messages.Select(p => p.Message));
         }
     }

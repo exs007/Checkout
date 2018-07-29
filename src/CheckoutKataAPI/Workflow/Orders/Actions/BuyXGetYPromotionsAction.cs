@@ -11,7 +11,9 @@ using System.Threading.Tasks;
 
 namespace CheckoutKataAPI.Workflow.Orders.Actions
 {
-    //add promotion products into the context by promo rules
+    /// <summary>
+    /// Add promotion products into the context by promo rules
+    /// </summary>
     public class BuyXGetYPromotionsAction : IWorkflowAction<OrderCalculationContext>
     {
         public void ExecuteAction(OrderCalculationContext context, IWorkflowProcessorContext processorContext)

@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
+using CheckoutKataAPI.Constants;
 using CheckoutKataAPI.DAL;
-using CheckoutKataAPI.Entities;
 using CheckoutKataAPI.Exceptions;
 using CheckoutKataAPI.Services;
 using CheckoutKataAPI.Test.DAL;
@@ -87,7 +87,7 @@ namespace CheckoutKataAPI.Test.Services
             item.BuyItems = new List<BuyPromotionItem>();
             
             var exception = Assert.ThrowsAny<AppValidationException>(() => _promotionService.AddPromotion(item));
-            Assert.Contains("Buy part isn't specified", exception.Messages.Select(p => p.Message));
+            Assert.Contains(MessageConstants.MISSED_BUY_PART_IN_GET_BUY_PROMOTION, exception.Messages.Select(p => p.Message));
         }
 
         [Fact]
@@ -97,7 +97,7 @@ namespace CheckoutKataAPI.Test.Services
             item.GetItems = new List<GetPromotionItem>();
             
             var exception = Assert.ThrowsAny<AppValidationException>(() => _promotionService.AddPromotion(item));
-            Assert.Contains("Get part isn't specified", exception.Messages.Select(p => p.Message));
+            Assert.Contains(MessageConstants.MISSED_GET_PART_IN_GET_BUY_PROMOTION, exception.Messages.Select(p => p.Message));
         }
 
         [Fact]
@@ -106,7 +106,7 @@ namespace CheckoutKataAPI.Test.Services
             var item = Mock.Of<BasePromotion>();
             
             var exception = Assert.ThrowsAny<ArgumentException>(() => _promotionService.AddPromotion(item));
-            Assert.Contains("The following promotion type can't be processed", exception.Message);
+            Assert.Contains(MessageConstants.PROMOTION_TYPE_IS_UNKNOWN, exception.Message);
         }
 
         [Fact]

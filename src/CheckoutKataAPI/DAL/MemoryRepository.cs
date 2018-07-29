@@ -8,7 +8,10 @@ using System.Threading.Tasks;
 
 namespace CheckoutKataAPI.DAL
 {
-    // Storing is based on a dictionary with locks for providing thread-safe access
+    /// <summary>
+    /// Storing is based on a dictionary with locks for providing thread-safe access
+    /// </summary>
+    /// <typeparam name="T">BaseEntity</typeparam>
     public class MemoryRepository<T> : IRepository<T> where T : BaseEntity
     {
         //TODO: return a copy of an object

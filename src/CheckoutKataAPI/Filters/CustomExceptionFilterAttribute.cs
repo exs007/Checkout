@@ -12,7 +12,9 @@ using CheckoutKataAPI.Exceptions;
 
 namespace CheckoutKataAPI.Filters
 {
-    //Common exception handling. Send 200 with an exception messages for business rules
+    /// <summary>
+    /// Common exception handling. Send 200 with an exception messages for business rules
+    /// </summary>
     //TODO: add critical exception logging
     public class CustomExceptionFilterAttribute : ExceptionFilterAttribute
     {

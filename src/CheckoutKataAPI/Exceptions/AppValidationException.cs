@@ -6,7 +6,9 @@ using CheckoutKataAPI.Models;
 
 namespace CheckoutKataAPI.Exceptions
 {
-    // Business rules exception
+    /// <summary>
+    /// Business rules exception
+    /// </summary>
     public class AppValidationException : Exception
     {
         public IReadOnlyList<MessageInfo> Messages => _messages;

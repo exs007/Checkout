@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace CheckoutKataAPI.Workflow.Orders
 {
+    /// <summary>
+    /// Order calculation processor for an order during checkout
+    /// </summary>
     public class OrderCalculationWorkflowProcessor : WorkflowProcessor<OrderCalculationContext>, IOrderCalculationWorkflowProcessor
     {
         public OrderCalculationWorkflowProcessor(IServiceProvider provider) : base(provider)

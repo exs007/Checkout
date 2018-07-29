@@ -2,7 +2,9 @@
 
 namespace CheckoutKataAPI.Workflow.Base
 {
-    //stores a description of an action for a processor
+   /// <summary>
+   /// Stores a description of an action for a processor
+   /// </summary>
     public class ActionItem
     {   
         public Type ActionType { get; }

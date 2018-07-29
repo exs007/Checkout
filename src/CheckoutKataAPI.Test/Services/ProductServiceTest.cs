@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Text;
 using System.Linq;
 using CheckoutKataAPI.DAL;
-using CheckoutKataAPI.Entities;
 using CheckoutKataAPI.Exceptions;
 using CheckoutKataAPI.Services;
 using CheckoutKataAPI.Test.DAL;
 using GenFu;
 using Xunit;
 using CheckoutKataAPI.Entities.Products;
+using CheckoutKataAPI.Constants;
 
 [assembly: CollectionBehavior(CollectionBehavior.CollectionPerAssembly)]
 namespace CheckoutKataAPI.Test.Services
@@ -49,7 +49,7 @@ namespace CheckoutKataAPI.Test.Services
             product2.SKU = product2.SKU;
 
             var exception = Assert.ThrowsAny<AppValidationException>(() => _productService.AddProduct(product2));
-            Assert.Contains("Exist SKU", exception.Messages.Select(p=>p.Message));
+            Assert.Contains(MessageConstants.PRODUCT_SKU_DUPLICATE, exception.Messages.Select(p=>p.Message));
         }
 
         [Fact]
@@ -59,7 +59,7 @@ namespace CheckoutKataAPI.Test.Services
             product.PriceType = 0;
 
             var exception = Assert.ThrowsAny<AppValidationException>(() => _productService.AddProduct(product));
-            Assert.Contains("Invalid price type", exception.Messages.Select(p=>p.Message));
+            Assert.Contains(MessageConstants.NOT_VALID_PRICE_TYPE_IN_PRODUCT, exception.Messages.Select(p=>p.Message));
         }
 
         [Fact]
@@ -83,7 +83,7 @@ namespace CheckoutKataAPI.Test.Services
             var ids = new List<int>(){ id };
 
             var exception = Assert.Throws<AppValidationException>(() => _productService.GetProducts(ids));
-            Assert.Contains("Invalid product id", exception.Messages.Select(p=>p.Message));
+            Assert.Contains(MessageConstants.NOT_FOUND_PRODUCT_ID, exception.Messages.Select(p=>p.Message));
         }
 
         [Fact]
@@ -125,7 +125,7 @@ namespace CheckoutKataAPI.Test.Services
             product2 =_productRepository.Add(product2);
             
             var exception = Assert.Throws<Exception>(() => _productService.GetProduct(product1.SKU));
-            Assert.Contains("Multiple products with the same SKU", exception.Message);
+            Assert.Contains(MessageConstants.INVALID_SETUP_MULTIPLE_PRODUCTS_WITH_SAME_SKU, exception.Message);
         }
     }
 }

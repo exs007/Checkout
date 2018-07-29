@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CheckoutKataAPI.Constants;
 using CheckoutKataAPI.DAL;
 using CheckoutKataAPI.Entities;
 using CheckoutKataAPI.Entities.Promotions;
@@ -34,16 +35,16 @@ namespace CheckoutKataAPI.Services
                 var buyGetPomotion = item as BuyXGetYPromotion;
                 if (buyGetPomotion.BuyItems?.Count == 0)
                 {
-                    throw new AppValidationException(nameof(buyGetPomotion.BuyItems), "Buy part isn't specified");
+                    throw new AppValidationException(nameof(buyGetPomotion.BuyItems), MessageConstants.MISSED_BUY_PART_IN_GET_BUY_PROMOTION);
                 }
                 if (buyGetPomotion.GetItems?.Count == 0)
                 {
-                    throw new AppValidationException(nameof(buyGetPomotion.GetItems), "Get part isn't specified");
+                    throw new AppValidationException(nameof(buyGetPomotion.GetItems), MessageConstants.MISSED_GET_PART_IN_GET_BUY_PROMOTION);
                 }
             }
             else
             {
-                throw new ArgumentException("The following promotion type can't be processed");
+                throw new ArgumentException(MessageConstants.PROMOTION_TYPE_IS_UNKNOWN);
             }
 
             return _promotionRepository.Add(item);

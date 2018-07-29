@@ -2,7 +2,9 @@
 
 namespace CheckoutKataAPI.Workflow.Base
 {
-    //interface for an executing helper context, at least should provide abitity to get dependencies
+    /// <summary>
+    /// Interface for an executing helper context, at least should provide abitity to get dependencies
+    /// </summary>
     public interface IWorkflowProcessorContext : IDisposable
     {
         T Resolve<T>();

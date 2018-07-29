@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
+using CheckoutKataAPI.Constants;
 
 namespace CheckoutKataAPI.Workflow.Base
 {
-    //List based execution processor
-    //A specific list of actions should be specified for a concrete processor in a derifed class
+    /// <summary>
+    /// List based execution processor. A specific list of actions should be specified for a concrete processor in a derifed class
+    /// </summary>
+    /// <typeparam name="T">WorkflowDataContext</typeparam>
     public class WorkflowProcessor<T> : IWorkflowProcessor<T>
         where T : WorkflowDataContext
     {
@@ -55,7 +58,7 @@ namespace CheckoutKataAPI.Workflow.Base
             var exist = Actions.Any(p => p.ActionType.Equals(actionItem.ActionType));
             if (exist)
             {
-                throw new ArgumentException("The same action is specified more than one time");
+                throw new ArgumentException(MessageConstants.LIST_BASED_WORKFLOW_PROCESSOR_NOT_ALLOW_SAME_ACTION_MULTIPLE_TIME);
             }
             Actions.Add(actionItem);
         }

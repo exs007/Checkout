@@ -3,7 +3,10 @@ using System.Linq;
 
 namespace CheckoutKataAPI.Models
 {
-    // Common repsonse structure
+    /// <summary>
+    /// Common repsonse structure
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public struct Result<T>
     {
         private readonly List<MessageInfo> _messages;

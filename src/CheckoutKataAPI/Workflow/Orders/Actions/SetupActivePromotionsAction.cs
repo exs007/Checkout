@@ -9,7 +9,9 @@ using System.Threading.Tasks;
 
 namespace CheckoutKataAPI.Workflow.Orders.Actions
 {
-    //setup all promotions which are avaliable now
+    /// <summary>
+    /// Setup all promotions which are avaliable now
+    /// </summary>
     public class SetupActivePromotionsAction : IWorkflowAction<OrderCalculationContext>
     {
         public void ExecuteAction(OrderCalculationContext context, IWorkflowProcessorContext processorContext)

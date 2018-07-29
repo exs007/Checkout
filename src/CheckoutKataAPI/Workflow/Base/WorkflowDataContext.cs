@@ -1,6 +1,8 @@
 ﻿namespace CheckoutKataAPI.Workflow.Base
 {
-    // basic data context
+    /// <summary>
+    /// Basic data context
+    /// </summary>
     public abstract class WorkflowDataContext
     {
     }

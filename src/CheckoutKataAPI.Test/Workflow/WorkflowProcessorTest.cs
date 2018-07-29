@@ -2,17 +2,11 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
-using CheckoutKataAPI.DAL;
-using CheckoutKataAPI.Entities;
-using CheckoutKataAPI.Exceptions;
-using CheckoutKataAPI.Services;
-using CheckoutKataAPI.Test.DAL;
 using GenFu;
 using Xunit;
-using CheckoutKataAPI.Entities.Products;
 using CheckoutKataAPI.Workflow.Base;
-using CheckoutKataAPI.Test.Workflow;
 using Moq;
+using CheckoutKataAPI.Constants;
 
 namespace CheckoutKataAPI.Test.Workflow
 {
@@ -91,7 +85,7 @@ namespace CheckoutKataAPI.Test.Workflow
             };
             
             var exception = Assert.Throws<ArgumentException>(() => new WorkflowProcessor<FakeWorkflowDataContent>(provider, actions));
-            Assert.Contains("The same action is specified more than one time", exception.Message);
+            Assert.Contains(MessageConstants.LIST_BASED_WORKFLOW_PROCESSOR_NOT_ALLOW_SAME_ACTION_MULTIPLE_TIME, exception.Message);
         }
     }
 }

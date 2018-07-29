@@ -3,6 +3,9 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace CheckoutKataAPI.Workflow.Base
 {
+    /// <summary>
+    /// Common implementation of workflow processor
+    /// </summary>
     public class WorkflowProcessorContext : IWorkflowProcessorContext
     {
         private readonly IServiceProvider _provider;

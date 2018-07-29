@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace CheckoutKataAPI.Workflow.Orders
 {
-    //An interface for calculation total for an order during checkout
+    /// <summary>
+    /// An interface for calculating an order 
+    /// </summary>
     public interface IOrderCalculationWorkflowProcessor
     {
         OrderCalculationContext CalculateOrder(OrderCalculationContext context);

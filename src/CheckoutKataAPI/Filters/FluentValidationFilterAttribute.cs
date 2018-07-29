@@ -13,7 +13,9 @@ using System.Threading.Tasks;
 
 namespace CheckoutKataAPI.Filters
 {
-    //Fetch a validator by a model type
+    /// <summary>
+    /// Execute fluent validators based by a model type and add errors in the model state
+    /// </summary>
     public class FluentValidationFilterAttribute : ActionFilterAttribute
     {
         public override async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)

@@ -5,7 +5,9 @@ using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace CheckoutKataAPI.Filters
 {
-    // Generate common request structure for the model state errors
+    /// <summary>
+    /// Generate common request structure for the model state errors
+    /// </summary>
     public class ModelStateValidationFilterAttribute : ActionFilterAttribute
     {
         public override void OnActionExecuting(ActionExecutingContext context)

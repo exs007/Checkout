@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CheckoutKataAPI.Constants;
 using CheckoutKataAPI.DAL;
 using CheckoutKataAPI.Entities;
 using CheckoutKataAPI.Entities.Orders;
@@ -47,14 +48,14 @@ namespace CheckoutKataAPI.Services
         {
             if (item == null)
             {
-                throw new AppValidationException("Add product model isn't specififed");
+                throw new AppValidationException(MessageConstants.ADD_PRODUCT_MODEL_IS_EMPTY);
             }
 
             var order = GetOrderFromRepository(idOrder);
             var product = GetProduct(item.SKU);
             if (product.PriceType == PriceType.PerEach && (item.QTY - Math.Floor(item.QTY))!=0)
             {
-                throw new AppValidationException("Fractional QTY isn't avaliable for a product with price per each item");
+                throw new AppValidationException(MessageConstants.FRACTIONAL_QTY_NOT_AVALIABLE_IN_ORDER_FOR_PRODUCT_WITH_LB_PRICE);
             }
 
             var orderToProduct = order.OrderToProducts.FirstOrDefault(p=>p.IdProduct==product.Id);
@@ -81,12 +82,12 @@ namespace CheckoutKataAPI.Services
             var orderToProductForDelete = order.OrderToProducts.FirstOrDefault(p=>p.IdProduct==product.Id);
             if (orderToProductForDelete == null)
             {
-                throw new AppValidationException("The given product doesn't exist in the order");
+                throw new AppValidationException(MessageConstants.PRODUCT_NOT_EXIST_IN_ORDER);
             }
 
             if (orderToProductForDelete.IdUsedBuyGetPromotion.HasValue)
             {
-                throw new AppValidationException("Deleting promotion product isn't permitted");
+                throw new AppValidationException(MessageConstants.DELETE_PROMO_PRODUCT_NOT_PERMITTED_IN_ORDER);
             }
 
             order.OrderToProducts.Remove(orderToProductForDelete);
@@ -101,7 +102,7 @@ namespace CheckoutKataAPI.Services
             var order = _orderRepository.Select(id);
             if (order == null)
             {
-                throw new AppValidationException("Invalid order id");
+                throw new AppValidationException(MessageConstants.NOT_FOUND_ORDER_ID);
             }
 
             return order;
@@ -112,7 +113,7 @@ namespace CheckoutKataAPI.Services
             var product = _productService.GetProduct(sku);
             if (product==null)
             {
-                throw new AppValidationException("Invalid product SKU");
+                throw new AppValidationException(MessageConstants.NOT_FOUND_PRODUCT_BY_SKU_CODE);
             }
 
             return product;
